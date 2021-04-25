@@ -14,6 +14,7 @@ class Home extends StatelessWidget {
     void _showSettingsPanel(){
       showModalBottomSheet(context: context, builder: (context){
         return Container(
+          padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
           child: SettingsForm(),
         );
 
@@ -28,6 +29,9 @@ class Home extends StatelessWidget {
               title: Text('Brew Crew'),
               actions: <Widget>[
                 TextButton.icon(
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.white.withOpacity(0.03),
+                    ),
                     onPressed: () async{
                       await _auth.signOut();
                     },
@@ -43,15 +47,33 @@ class Home extends StatelessWidget {
                     )
                 ),
                 TextButton.icon(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.white.withOpacity(0.03),
+                  ),
                   onPressed: () {
                     _showSettingsPanel();
                   },
-                  icon: Icon(Icons.settings),
-                  label:Text('Settings'),
+                  icon: Icon(
+                      Icons.settings,
+                  color: Colors.black,),
+                  label:Text(
+                      'Settings',
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
                 )
               ]
           ),
-          body: BrewList(),
+          body: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/coffee_bg.png'),
+                fit: BoxFit.cover,
+              )
+            ),
+              child: BrewList()
+          ),
       ),
     );
   }

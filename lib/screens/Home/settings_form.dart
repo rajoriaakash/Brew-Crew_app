@@ -32,71 +32,87 @@ class _SettingsFormState extends State<SettingsForm> {
 
           return Form(
               key: _formkey,
-              child: Column(
-                children: [
-                  Text('Update your brew settings'),
-                  SizedBox(height: 30.0),
-                  //TextFiled for name
-                  TextFormField(
-                    initialValue: userData.name,
-                      decoration: InputDecoration(
-                        hintText: 'Enter your name',
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Text(
+                        'Update your brew settings',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.brown[900],
                       ),
-                      validator: (val) => val.isEmpty? 'Please enter a name' : null,
+                    ),
+                    SizedBox(height: 30.0),
+                    //TextFiled for name
+                    TextFormField(
+                      initialValue: userData.name,
+                        decoration: InputDecoration(
+                          hintText: 'Enter your name',
+                        ),
+                        validator: (val) => val.isEmpty? 'Please enter a name' : null,
+                        onChanged: (val) {
+                          setState(() {
+                            _currentName = val;
+                          });
+                        }
+                    ),
+                    SizedBox(height: 20.0),
+                    //dropdown for sugars
+                    DropdownButtonFormField(
+                      value: _currentsugars ?? userData.sugars,
+                      items: sugars.map((sugar){
+                        return DropdownMenuItem(
+                          value: sugar,
+                          child: Text("$sugar sugars"),
+                        );
+                      }).toList(),
                       onChanged: (val) {
                         setState(() {
-                          _currentName = val;
+                          _currentsugars = val;
                         });
-                      }
-                  ),
-                  SizedBox(height: 20.0),
-                  //dropdown for sugars
-                  DropdownButtonFormField(
-                    value: _currentsugars ?? userData.sugars,
-                    items: sugars.map((sugar){
-                      return DropdownMenuItem(
-                        value: sugar,
-                        child: Text("$sugar sugars"),
-                      );
-                    }).toList(),
-                    onChanged: (val) {
-                      setState(() {
-                        _currentsugars = val;
-                      });
-                    },
-                  ),
-                  //slider for strength
-                  Slider(
-                    value: (_currentstrength ?? userData.strength).toDouble()  ,
-                    activeColor: Colors.brown[_currentstrength ?? userData.strength ],
-                    inactiveColor: Colors.brown[_currentstrength ?? userData.strength ],
-                    min: 100,
-                    max: 900,
-                    divisions: 8,
-                    onChanged: (val) {
-                      setState(() {
-                        _currentstrength = val.round();
-                      });
-                    },
-                  ),
-                  SizedBox(height: 30.0),
-                  //update button
-                  TextButton(
-                    onPressed: () async{
-                      if(_formkey.currentState.validate()) {
-                        await DatabaseService(uid: user.uid).updateUserData(
-                          _currentName ?? userData.name,
-                          _currentsugars ?? userData.sugars,
-                          _currentstrength ?? userData.strength,
-                        );
-                      }
-                      Navigator.pop(context);
-                    },
-                    child: Text('Update'),
+                      },
+                    ),
+                    SizedBox(height: 20.0,),
+                    //slider for strength
+                    Slider(
+                      value: (_currentstrength ?? userData.strength).toDouble()  ,
+                      activeColor: Colors.brown[_currentstrength ?? userData.strength ],
+                      inactiveColor: Colors.brown[_currentstrength ?? userData.strength ],
+                      min: 100,
+                      max: 900,
+                      divisions: 8,
+                      onChanged: (val) {
+                        setState(() {
+                          _currentstrength = val.round();
+                        });
+                      },
+                    ),
+                    SizedBox(height: 30.0),
+                    //update button
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.white.withOpacity(0.03),
+                      ),
+                      onPressed: () async{
+                        if(_formkey.currentState.validate()) {
+                          await DatabaseService(uid: user.uid).updateUserData(
+                            _currentName ?? userData.name,
+                            _currentsugars ?? userData.sugars,
+                            _currentstrength ?? userData.strength,
+                          );
+                        }
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                          'Update',
+                        style: TextStyle(color: Colors.brown[900]),
+                      ),
 
-                  )
+                    )
 
-                ],
+                  ],
+                ),
               ),
 
           );
