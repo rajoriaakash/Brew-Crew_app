@@ -20,7 +20,7 @@ class _SettingsFormState extends State<SettingsForm> {
   @override
   Widget build(BuildContext context) {
 
-    final user = Provider.of<Userc>(context);
+    Userc user = Provider.of<Userc>(context);
 
     return StreamBuilder<UserData>(
       stream: DatabaseService(uid: user.uid).userData,
@@ -32,8 +32,7 @@ class _SettingsFormState extends State<SettingsForm> {
 
           return Form(
               key: _formkey,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
+              child: SingleChildScrollView(
                 child: Column(
                   children: [
                     Text(
@@ -60,7 +59,7 @@ class _SettingsFormState extends State<SettingsForm> {
                     SizedBox(height: 20.0),
                     //dropdown for sugars
                     DropdownButtonFormField(
-                      value: _currentsugars ?? userData.sugars,
+                      value: _currentsugars ?? '0',
                       items: sugars.map((sugar){
                         return DropdownMenuItem(
                           value: sugar,
@@ -92,7 +91,8 @@ class _SettingsFormState extends State<SettingsForm> {
                     //update button
                     TextButton(
                       style: TextButton.styleFrom(
-                        backgroundColor: Colors.white.withOpacity(0.03),
+                        backgroundColor: Colors.brown[900].withOpacity(0.03),
+                        padding: EdgeInsets.all(15.0)
                       ),
                       onPressed: () async{
                         if(_formkey.currentState.validate()) {
@@ -106,7 +106,10 @@ class _SettingsFormState extends State<SettingsForm> {
                       },
                       child: Text(
                           'Update',
-                        style: TextStyle(color: Colors.brown[900]),
+                        style: TextStyle(
+                          color: Colors.brown[900],
+                          fontSize: 20.0,
+                        ),
                       ),
 
                     )
